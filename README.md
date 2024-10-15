@@ -1,4 +1,4 @@
-# SenangWebs Loading (SWL) Library
+# SenangWebs Loading (SWL)
 
 SenangWebs Loading is a lightweight, customizable JavaScript library that provides an elegant loading screen for your web applications. It offers various loading animations and options to enhance the user experience during page load.
 
