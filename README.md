@@ -13,6 +13,9 @@ SenangWebs Loading is a lightweight, customizable JavaScript library that provid
 - No dependencies, pure vanilla JavaScript
 - Compatible with Tailwind CSS
 
+## Examples
+[https://unpkg.com/senangwebs-loading@latest/examples/index.html](https://unpkg.com/senangwebs-loading@latest/examples/index.html)
+
 ## Installation
 
 1. Download the `swl.js` file from this repository.
@@ -45,7 +48,7 @@ You can customize the loader using the following data attributes on the `<body>`
 - `data-swl-bg-blur="5"`: Set the blur effect for the background (in pixels)
 - `data-swl-z-index="9999"`: Set the z-index of the loader overlay
 
-## Examples
+## Usage
 
 ### Default Spinner
 
