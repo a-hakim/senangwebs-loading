@@ -1,7 +1,7 @@
 {
   "name": "senangwebs-loading",
   "version": "1.1.0",
-  "description": "",
+  "description": "SenangWebs Loading (SWL) is a lightweight JavaScript library that provides a simple and customizable loading indicator for your web pages.",
   "main": "index.js",
   "directories": {
     "example": "examples"
@@ -11,9 +11,9 @@
     "dev": "webpack --mode development --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["loading", "indicator", "web", "customizable"],
+  "author": "a-hakim",
+  "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.25.8",
     "@babel/preset-env": "^7.25.8",
