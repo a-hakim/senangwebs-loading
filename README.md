@@ -1,39 +1,63 @@
-# SenangWebs Loading (SWL) Library
+# SenangWebs Loading (SWL)
 
-SenangWebs Loading is a lightweight, customizable JavaScript library that provides an elegant loading screen for your web applications. It offers various loading animations and options to enhance the user experience during page load.
+SenangWebs Loading (SWL) is a lightweight JavaScript library that provides customizable loading screens for web applications. With minimal setup, you can add elegant loading animations to your web pages, enhancing the user experience during page load.
 
 ## Features
 
-- Easy to implement with minimal setup
+- Easy to integrate with existing projects
 - Multiple loader types: spinner, pulsing, and custom image
-- Support for custom loader content
 - Customizable colors for loaders and overlay
 - Backdrop blur effect option
 - Minimum duration setting to ensure visibility of the loading screen
 - Automatically hides when the page is fully loaded
 - No dependencies, pure vanilla JavaScript
 - Compatible with Tailwind CSS
+- Responsive and works on all modern browsers
 
 ## Examples
 [https://unpkg.com/senangwebs-loading@latest/examples/index.html](https://unpkg.com/senangwebs-loading@latest/examples/index.html)
 
 ## Installation
 
-1. Download the `swl.js` file from this repository.
-2. Include the file in your project directory.
+### Using npm
+
+```bash
+npm install senangwebs-loading
+```
+
+### Using a CDN
+
+You can include SenangWebs Loading directly in your HTML file using unpkg:
+
+```html
+<script src="https://unpkg.com/senangwebs-loading@latest/dist/swl.js"></script>
+```
 
 ## Usage
 
-1. Include the SenangWebs Loading library in your HTML file, just before the closing `</body>` tag:
+1. Include the SWL JavaScript file in your HTML, just before the closing `</body>` tag:
 
 ```html
+<!-- If installed via npm -->
 <script src="path/to/swl.js"></script>
+
+<!-- Or if using unpkg -->
+<script src="https://unpkg.com/senangwebs-loading@latest/dist/swl.js"></script>
 ```
 
 2. Add a div element with the `data-swl` attribute and any customization options:
 
 ```html
-<div data-swl data-swl-type="spinner" data-swl-color="#007bff" data-swl-duration="2000">
+<div 
+  data-swl 
+  data-swl-type="spinner" 
+  data-swl-color="#007bff" 
+  data-swl-duration="2000"
+  data-swl-bg-color="#ffffff"
+  data-swl-bg-opacity="0.8"
+  data-swl-bg-blur="5"
+  data-swl-z-index="9999"
+>
   <!-- Optional: Custom loader content -->
 </div>
 ```
@@ -51,7 +75,7 @@ You can customize the loader using the following data attributes on the SWL div 
 - `data-swl-bg-blur="5"`: Set the blur effect for the background (in pixels)
 - `data-swl-z-index="9999"`: Set the z-index of the loader overlay
 
-## Usage
+## Examples
 
 ### Default Spinner
 
@@ -94,22 +118,37 @@ You can customize the loader using the following data attributes on the SWL div 
 </div>
 ```
 
-## Browser Compatibility
+## Supported Loaders
 
-SenangWebs Loading is compatible with all modern browsers that support ECMAScript 5 and above.
+- Spinner: A rotating circular loader
+- Pulse: A pulsing circular loader
+- Image: A custom image loader
 
-## License
+## Browser Support
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+SenangWebs Loading works on all modern browsers, including:
+
+- Chrome
+- Firefox
+- Safari
+- Edge
+- Opera
 
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+
+## Acknowledgments
+
+- Inspired by various loading screen libraries in the web development community
+- Thanks to all contributors who have helped to improve this library
+
 ## Support
 
-If you encounter any problems or have any questions, please open an issue in this repository.
+If you encounter any issues or have questions, please file an issue on the GitHub repository.
 
----
-
-Enjoy using SenangWebs Loading! We hope it enhances the loading experience of your web applications.
+Happy loading!

@@ -8,11 +8,12 @@
       position: fixed !important;
       top: 0 !important;
       left: 0 !important;
-      width: 100% !important;
-      height: 100% !important;
+      width: 100vw !important;
+      height: 100vh !important;
       display: flex !important;
       justify-content: center !important;
       align-items: center !important;
+      z-index: 9999 !important;
     }
     .swl-backdrop {
       position: absolute !important;
@@ -65,7 +66,8 @@
       content.appendChild(swlElement.firstChild);
     }
 
-    swlElement.appendChild(overlay);
+    // Append overlay to body instead of swlElement
+    document.body.appendChild(overlay);
 
     // Detect loader type, color, duration, and overlay settings
     const loaderType = swlElement.dataset.swlType || 'spinner';
@@ -163,24 +165,22 @@
       return img;
     }
 
-    // Hide overlay when page is loaded and minimum duration has passed
+    // Remove overlay when page is loaded and minimum duration has passed
     const startTime = Date.now();
 
-    function hideOverlay() {
+    function removeOverlay() {
       const elapsedTime = Date.now() - startTime;
       const remainingTime = Math.max(0, minDuration - elapsedTime);
       
       setTimeout(function() {
-        overlay.style.display = 'none';
-        backdrop.style.display = 'none';
-        content.style.display = 'none';
+        overlay.remove();
       }, remainingTime);
     }
 
     if (document.readyState === 'complete') {
-      hideOverlay();
+      removeOverlay();
     } else {
-      window.addEventListener('load', hideOverlay);
+      window.addEventListener('load', removeOverlay);
     }
   });
 })();
