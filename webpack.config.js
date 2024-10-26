@@ -4,7 +4,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 module.exports = {
   entry: {
     swl: './src/js/swl.js',
-    styles: './src/css/swl.css'
   },
   output: {
     filename: '[name].js',
@@ -30,9 +29,4 @@ module.exports = {
       }
     ]
   },
-  plugins: [
-    new MiniCssExtractPlugin({
-      filename: 'swl.css'
-    })
-  ]
 };
