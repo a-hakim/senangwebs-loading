@@ -14,6 +14,11 @@
       height: 100vh !important;
       background: #ffffff !important;
       z-index: 99999 !important;
+      opacity: 1;
+      transition: opacity 0.3s ease-out;
+    }
+    .swl-priority.swl-fade-out {
+      opacity: 0;
     }
   `;
   
@@ -32,7 +37,7 @@
     const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
     hex = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ?
+    return result ? 
       `rgba(${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}, ${opacity})`
       : `rgba(255, 255, 255, ${opacity})`; // Default fallback
   }
@@ -99,7 +104,13 @@
     const remainingTime = Math.max(0, minDuration - elapsedTime);
   
     setTimeout(function() {
+      // First fade out the priority loader
+      priorityLoader.classList.add('swl-fade-out');
+      
+      // Then fade out the actual loader
       overlay.classList.add('swl-fade-out');
+      
+      // Remove both after animation
       setTimeout(() => {
         overlay.remove();
         priorityLoader.remove();
@@ -152,7 +163,6 @@
       100% { transform: scale(0.8); opacity: 0.5; }
     }
   `;
-  
   document.head.appendChild(style);
 
   // Initialize as soon as DOM is ready
