@@ -94,7 +94,6 @@
       opacity: 1;
       transition: opacity 0.3s ease-out;
       z-index: 99999 !important;
-      background: #ffffff !important;
     }
     .swl-fade-out {
       opacity: 0;
