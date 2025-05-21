@@ -4,7 +4,7 @@
   // Create and inject critical styles immediately
   const criticalStyles = `
     .swl-priority {
-      display: none !important;
+      display: flex !important;
       justify-content: center !important;
       align-items: center !important;
       position: fixed !important;
@@ -14,24 +14,6 @@
       height: 100vh !important;
       background: #ffffff !important;
       z-index: 99999 !important;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-    .swl-priority.show {
-      display: flex !important;
-      opacity: 1;
-    }
-    .swl-spinner {
-      width: 50px !important;
-      height: 50px !important;
-      border: 3px solid #f3f3f3 !important;
-      border-top: 3px solid #3498db !important;
-      border-radius: 50% !important;
-      animation: swl-spin 1s linear infinite !important;
-    }
-    @keyframes swl-spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
     }
   `;
   
@@ -39,23 +21,11 @@
   criticalStyle.textContent = criticalStyles;
   document.head.appendChild(criticalStyle);
 
-  // Create priority loader immediately but don't show it yet
+  // Create empty priority loader immediately
   const priorityLoader = document.createElement('div');
   priorityLoader.className = 'swl-priority';
-  priorityLoader.innerHTML = '<div class="swl-spinner"></div>';
+  document.body.appendChild(priorityLoader);
   
-  // Add loader and show it only when needed
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-      document.body.appendChild(priorityLoader);
-      // Show after a brief delay to ensure smooth transition
-      requestAnimationFrame(() => priorityLoader.classList.add('show'));
-    });
-  } else {
-    document.body.appendChild(priorityLoader);
-    requestAnimationFrame(() => priorityLoader.classList.add('show'));
-  }
-
   // --- Helper Functions (Defined Once) ---
   
   function hexToRgba(hex, opacity) {
@@ -68,18 +38,40 @@
   }
   
   function createSpinner(color) {
-    const div = document.createElement('div');
-    div.className = 'swl-spinner';
-    div.style.borderColor = hexToRgba(color, 0.2);
-    div.style.borderTopColor = color;
-    return div;
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'swl-spinner');
+    svg.setAttribute('viewBox', '0 0 50 50');
+    svg.style.animation = 'swl-spin 1s linear infinite';
+  
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('cx', '25');
+    circle.setAttribute('cy', '25');
+    circle.setAttribute('r', '20');
+    circle.setAttribute('fill', 'none');
+    circle.setAttribute('stroke', color);
+    circle.setAttribute('stroke-width', '5');
+    circle.setAttribute('stroke-linecap', 'round');
+    circle.setAttribute('stroke-dasharray', '80, 200');
+    circle.setAttribute('stroke-dashoffset', '0');
+  
+    svg.appendChild(circle);
+    return svg;
   }
   
   function createPulse(color) {
-    const div = document.createElement('div');
-    div.className = 'swl-pulse';
-    div.style.backgroundColor = color;
-    return div;
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'swl-pulse');
+    svg.setAttribute('viewBox', '0 0 50 50');
+    svg.style.animation = 'swl-pulse 1s ease-in-out infinite';
+  
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('cx', '25');
+    circle.setAttribute('cy', '25');
+    circle.setAttribute('r', '20');
+    circle.setAttribute('fill', color);
+  
+    svg.appendChild(circle);
+    return svg;
   }
   
   function createImage(url) {
@@ -108,7 +100,6 @@
   
     setTimeout(function() {
       overlay.classList.add('swl-fade-out');
-      priorityLoader.classList.remove('show');
       setTimeout(() => {
         overlay.remove();
         priorityLoader.remove();
@@ -151,9 +142,9 @@
       display: block;
       margin: auto;
     }
-    .swl-pulse {
-      border-radius: 50% !important;
-      animation: swl-pulse 1s ease-in-out infinite !important;
+    @keyframes swl-spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
     @keyframes swl-pulse {
       0% { transform: scale(0.8); opacity: 0.5; }
