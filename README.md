@@ -9,7 +9,9 @@ SenangWebs Loading (SWL) is a lightweight JavaScript library that provides custo
 - Customizable colors for loaders and overlay
 - Backdrop blur effect option
 - Minimum duration setting to ensure visibility of the loading screen
-- Automatically hides when the page is fully loaded
+- Priority loading - shows immediately before page content
+- Smooth fade-out transitions
+- Image preloading support
 - No dependencies, pure vanilla JavaScript
 - Compatible with Tailwind CSS
 - Responsive and works on all modern browsers
@@ -27,22 +29,28 @@ npm install senangwebs-loading
 
 ### Using a CDN
 
-You can include SenangWebs Loading directly in your HTML file using unpkg:
+Include SenangWebs Loading in your HTML file's head section with the defer attribute:
 
 ```html
-<script src="https://unpkg.com/senangwebs-loading@latest/dist/swl.js"></script>
+<head>
+  <script src="https://unpkg.com/senangwebs-loading@latest/dist/swl.js" defer></script>
+</head>
 ```
 
 ## Usage
 
-1. Include the SWL JavaScript file in your HTML, just before the closing `</body>` tag:
+1. Include the SWL JavaScript file in your HTML's head section with defer:
 
 ```html
 <!-- If installed via npm -->
-<script src="path/to/swl.js"></script>
+<head>
+  <script src="path/to/swl.js" defer></script>
+</head>
 
 <!-- Or if using unpkg -->
-<script src="https://unpkg.com/senangwebs-loading@latest/dist/swl.js"></script>
+<head>
+  <script src="https://unpkg.com/senangwebs-loading@latest/dist/swl.js" defer></script>
+</head>
 ```
 
 2. Add a div element with the `data-swl` attribute and any customization options:
@@ -64,7 +72,7 @@ You can include SenangWebs Loading directly in your HTML file using unpkg:
 
 ## Configuration Options
 
-You can customize the loader using the following data attributes on the SWL div element:
+You can customize the loader using the following data attributes:
 
 - `data-swl-type`: Set the loader type ("spinner", "pulse", or "image")
 - `data-swl-color="#RRGGBB"`: Set the color of the loader (for spinner and pulse types)
@@ -74,6 +82,33 @@ You can customize the loader using the following data attributes on the SWL div 
 - `data-swl-bg-opacity="0.8"`: Set the opacity of the overlay background (0 to 1)
 - `data-swl-bg-blur="5"`: Set the blur effect for the background (in pixels)
 - `data-swl-z-index="9999"`: Set the z-index of the loader overlay
+
+## Performance Best Practices
+
+1. Place the script in the head with defer attribute:
+```html
+<head>
+  <script src="path/to/swl.js" defer></script>
+</head>
+```
+
+2. Preload custom loader images:
+```html
+<head>
+  <link rel="preload" href="path/to/loader.gif" as="image">
+</head>
+```
+
+3. Use appropriate minimum duration:
+- For small pages: 500-1000ms
+- For medium pages: 1000-2000ms
+- For content-heavy pages: 2000-3000ms
+
+4. Optimize z-index values:
+- Priority loader: 99999 (highest)
+- Normal loaders: 9999 (high)
+- Modal overlays: 1000-9998
+- Regular content: < 1000
 
 ## Examples
 
@@ -117,12 +152,6 @@ You can customize the loader using the following data attributes on the SWL div 
   <div class="custom-loader">Loading...</div>
 </div>
 ```
-
-## Supported Loaders
-
-- Spinner: A rotating circular loader
-- Pulse: A pulsing circular loader
-- Image: A custom image loader
 
 ## Browser Support
 
