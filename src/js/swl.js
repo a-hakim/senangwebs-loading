@@ -4,7 +4,7 @@
   // Create and inject critical styles immediately
   const criticalStyles = `
     .swl-priority {
-      display: flex !important;
+      display: none !important;
       justify-content: center !important;
       align-items: center !important;
       position: fixed !important;
@@ -14,6 +14,12 @@
       height: 100vh !important;
       background: #ffffff !important;
       z-index: 99999 !important;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .swl-priority.show {
+      display: flex !important;
+      opacity: 1;
     }
     .swl-spinner {
       width: 50px !important;
@@ -33,18 +39,21 @@
   criticalStyle.textContent = criticalStyles;
   document.head.appendChild(criticalStyle);
 
-  // Create priority loader immediately
+  // Create priority loader immediately but don't show it yet
   const priorityLoader = document.createElement('div');
   priorityLoader.className = 'swl-priority';
   priorityLoader.innerHTML = '<div class="swl-spinner"></div>';
   
-  // Add loader as soon as possible
-  if (document.body) {
-    document.body.appendChild(priorityLoader);
-  } else {
+  // Add loader and show it only when needed
+  if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
       document.body.appendChild(priorityLoader);
+      // Show after a brief delay to ensure smooth transition
+      requestAnimationFrame(() => priorityLoader.classList.add('show'));
     });
+  } else {
+    document.body.appendChild(priorityLoader);
+    requestAnimationFrame(() => priorityLoader.classList.add('show'));
   }
 
   // --- Helper Functions (Defined Once) ---
@@ -99,7 +108,11 @@
   
     setTimeout(function() {
       overlay.classList.add('swl-fade-out');
-      setTimeout(() => overlay.remove(), 300);
+      priorityLoader.classList.remove('show');
+      setTimeout(() => {
+        overlay.remove();
+        priorityLoader.remove();
+      }, 300);
     }, remainingTime);
   }
   
@@ -234,7 +247,6 @@
       
       const handleRemove = () => {
         removeOverlayLogic(overlay, startTime, minDuration);
-        priorityLoader.remove();
       };
       
       if (document.readyState === 'complete') {
