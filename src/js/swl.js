@@ -1,36 +1,6 @@
 // SenangWebs Loading Library
 
 (function() {
-  // Create and inject critical styles immediately
-  const criticalStyles = `
-    .swl-priority {
-      display: flex !important;
-      justify-content: center !important;
-      align-items: center !important;
-      position: fixed !important;
-      top: 0 !important;
-      left: 0 !important;
-      width: 100vw !important;
-      height: 100vh !important;
-      background: #ffffff !important;
-      z-index: 99999 !important;
-      opacity: 1;
-      transition: opacity 0.3s ease-out;
-    }
-    .swl-priority.swl-fade-out {
-      opacity: 0;
-    }
-  `;
-  
-  const criticalStyle = document.createElement('style');
-  criticalStyle.textContent = criticalStyles;
-  document.head.appendChild(criticalStyle);
-
-  // Create empty priority loader immediately
-  const priorityLoader = document.createElement('div');
-  priorityLoader.className = 'swl-priority';
-  document.body.appendChild(priorityLoader);
-  
   // --- Helper Functions (Defined Once) ---
   
   function hexToRgba(hex, opacity) {
@@ -104,17 +74,8 @@
     const remainingTime = Math.max(0, minDuration - elapsedTime);
   
     setTimeout(function() {
-      // First fade out the priority loader
-      priorityLoader.classList.add('swl-fade-out');
-      
-      // Then fade out the actual loader
       overlay.classList.add('swl-fade-out');
-      
-      // Remove both after animation
-      setTimeout(() => {
-        overlay.remove();
-        priorityLoader.remove();
-      }, 300);
+      setTimeout(() => overlay.remove(), 300);
     }, remainingTime);
   }
   
@@ -132,6 +93,8 @@
       align-items: center !important;
       opacity: 1;
       transition: opacity 0.3s ease-out;
+      z-index: 99999 !important;
+      background: #ffffff !important;
     }
     .swl-fade-out {
       opacity: 0;
