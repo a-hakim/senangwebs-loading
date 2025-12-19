@@ -2,6 +2,8 @@
 
 SenangWebs Loading (SWL) is a lightweight JavaScript library that provides customizable loading screens for web applications. With minimal setup, you can add elegant loading animations to your web pages, enhancing the user experience during page load.
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.md)
+
 ## Features
 
 - Instant loading indicator before DOM loads
