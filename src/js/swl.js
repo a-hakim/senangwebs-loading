@@ -9,7 +9,26 @@
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result ? 
       `rgba(${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}, ${opacity})`
-      : `rgba(255, 255, 255, ${opacity})`; // Default fallback
+      : null; // Return null if invalid hex
+  }
+
+  function isValidColor(color) {
+    // Check if it's a valid hex color
+    if (/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(color)) {
+      return true;
+    }
+    // Check if it's a valid CSS color name or rgb/rgba
+    const s = new Option().style;
+    s.color = color;
+    return s.color !== '';
+  }
+
+  function parseNumericAttr(value, defaultValue) {
+    if (value === undefined || value === null || value === '') {
+      return defaultValue;
+    }
+    const parsed = parseFloat(value);
+    return isNaN(parsed) ? defaultValue : parsed;
   }
   
   function createSpinner(color) {
@@ -69,13 +88,17 @@
     });
   }
   
-  function removeOverlayLogic(overlay, startTime, minDuration) {
+  function removeOverlayLogic(overlay, startTime, minDuration, originalOverflow) {
     const elapsedTime = Date.now() - startTime;
     const remainingTime = Math.max(0, minDuration - elapsedTime);
   
     setTimeout(function() {
       overlay.classList.add('swl-fade-out');
-      setTimeout(() => overlay.remove(), 300);
+      setTimeout(() => {
+        overlay.remove();
+        // Restore body scroll
+        document.body.style.overflow = originalOverflow || '';
+      }, 300);
     }, remainingTime);
   }
   
@@ -124,6 +147,17 @@
       50% { transform: scale(1); opacity: 1; }
       100% { transform: scale(0.8); opacity: 0.5; }
     }
+    .swl-sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
   `;
   document.head.appendChild(style);
 
@@ -165,23 +199,47 @@
       
       const loaderType = swlElement.dataset.swlType || 'spinner';
       const color = swlElement.dataset.swlColor || '#000000';
-      const minDuration = parseInt(swlElement.dataset.swlDuration, 10) || 0;
-      const bgColor = swlElement.dataset.swlBgColor || 'white';
-      const bgOpacity = parseFloat(swlElement.dataset.swlBgOpacity) || 0.8;
-      const bgBlur = parseInt(swlElement.dataset.swlBgBlur, 10) || 0;
-      const zIndex = parseInt(swlElement.dataset.swlZIndex, 10) || 9999;
+      const minDuration = parseNumericAttr(swlElement.dataset.swlDuration, 0);
+      const bgColor = swlElement.dataset.swlBgColor || '#ffffff';
+      const bgOpacity = parseNumericAttr(swlElement.dataset.swlBgOpacity, 0.8);
+      const bgBlur = parseNumericAttr(swlElement.dataset.swlBgBlur, 0);
+      const zIndex = parseNumericAttr(swlElement.dataset.swlZIndex, 9999);
+      const imageUrl = swlElement.dataset.swlImage; // Extract before removal
+
+      // Remove original element from DOM after extracting config
+      swlElement.remove();
+
+      // Prevent body scroll while loading
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
       
       overlay.style.zIndex = zIndex;
-      backdrop.style.backgroundColor = bgColor.startsWith('#') 
-          ? hexToRgba(bgColor, bgOpacity) 
-          : `rgba(${bgColor}, ${bgOpacity})`;
+      
+      // Handle background color with opacity
+      if (bgColor.startsWith('#')) {
+        const rgbaColor = hexToRgba(bgColor, bgOpacity);
+        backdrop.style.backgroundColor = rgbaColor || `rgba(255, 255, 255, ${bgOpacity})`;
+      } else if (isValidColor(bgColor)) {
+        // For named colors, use CSS color with separate opacity
+        backdrop.style.backgroundColor = bgColor;
+        backdrop.style.opacity = bgOpacity;
+      } else {
+        console.warn(`SWL Warning: Invalid color "${bgColor}". Using default white.`);
+        backdrop.style.backgroundColor = `rgba(255, 255, 255, ${bgOpacity})`;
+      }
       
       if (bgBlur > 0) {
         backdrop.style.backdropFilter = `blur(${bgBlur}px)`;
         backdrop.style.webkitBackdropFilter = `blur(${bgBlur}px)`;
       }
       
-      if (content.children.length === 0) {
+      // Add screen reader text
+      const srText = document.createElement('span');
+      srText.textContent = 'Loading...';
+      srText.className = 'swl-sr-only';
+      content.appendChild(srText);
+
+      if (content.children.length <= 1) {
         let loaderElement;
         switch (loaderType) {
           case 'spinner':
@@ -191,7 +249,6 @@
             loaderElement = createPulse(color);
             break;
           case 'image':
-            const imageUrl = swlElement.dataset.swlImage;
             if (imageUrl) {
                 loaderElement = createImage(imageUrl);
             } else {
@@ -204,12 +261,12 @@
             loaderElement = createSpinner(color);
         }
         if (loaderElement) {
-            content.appendChild(loaderElement);
+            content.insertBefore(loaderElement, srText);
         }
       }
       
       const handleRemove = () => {
-        removeOverlayLogic(overlay, startTime, minDuration);
+        removeOverlayLogic(overlay, startTime, minDuration, originalOverflow);
       };
       
       if (document.readyState === 'complete') {

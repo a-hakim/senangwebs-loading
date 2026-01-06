@@ -1,5 +1,5 @@
 const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -14,6 +14,13 @@ module.exports = {
     },
     globalObject: 'this'
   },
+  optimization: {
+    minimizer: [
+      new TerserPlugin({
+        extractComments: false, // Prevents LICENSE.txt generation
+      }),
+    ],
+  },
   module: {
     rules: [
       {
@@ -22,10 +29,6 @@ module.exports = {
         use: {
           loader: 'babel-loader'
         }
-      },
-      {
-        test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader']
       }
     ]
   },
