@@ -1,6 +1,6 @@
 {
   "name": "senangwebs-loading",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Lightweight JavaScript library that provides customizable loading screens for web applications.",
   "main": "index.js",
   "directories": {
@@ -16,6 +16,7 @@
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.25.8",
+    "@babel/plugin-transform-modules-systemjs": ">=7.29.4",
     "@babel/preset-env": "^7.25.8",
     "babel-loader": "^9.2.1",
     "css-loader": "^7.1.2",

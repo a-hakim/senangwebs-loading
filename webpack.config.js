@@ -1,25 +1,15 @@
 const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
 
-module.exports = {
-  entry: {
-    swl: './src/js/swl.js',
-  },
+const commonConfig = {
+  entry: './src/js/swl.js',
   output: {
-    filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
     library: {
       name: 'SWL',
       type: 'umd',
     },
     globalObject: 'this'
-  },
-  optimization: {
-    minimizer: [
-      new TerserPlugin({
-        extractComments: false, // Prevents LICENSE.txt generation
-      }),
-    ],
   },
   module: {
     rules: [
@@ -33,3 +23,33 @@ module.exports = {
     ]
   },
 };
+
+module.exports = [
+  {
+    ...commonConfig,
+    mode: 'production',
+    output: {
+      ...commonConfig.output,
+      filename: 'swl.js',
+    },
+    optimization: {
+      minimize: false,
+    },
+  },
+  {
+    ...commonConfig,
+    mode: 'production',
+    output: {
+      ...commonConfig.output,
+      filename: 'swl.min.js',
+    },
+    optimization: {
+      minimize: true,
+      minimizer: [
+        new TerserPlugin({
+          extractComments: false,
+        }),
+      ],
+    },
+  },
+];
