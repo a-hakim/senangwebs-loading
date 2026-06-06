@@ -1,6 +1,6 @@
 {
   "name": "senangwebs-loading",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "Lightweight JavaScript library that provides customizable loading screens for web applications.",
   "main": "index.js",
   "directories": {
@@ -9,7 +9,7 @@
   "scripts": {
     "build": "webpack --mode production",
     "dev": "webpack --mode development --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --test"
   },
   "keywords": ["loading", "indicator", "web", "customizable"],
   "author": "a-hakim",

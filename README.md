@@ -10,6 +10,7 @@ SenangWebs Loading (SWL) is a lightweight JavaScript library that provides custo
 - Easy to integrate with existing projects
 - Multiple loader types: spinner, pulsing, and custom image
 - Customizable colors for loaders and overlay
+- Configurable overlay stacking level
 - Backdrop blur effect option
 - Minimum duration setting to ensure visibility of the loading screen
 - Priority loading - shows immediately before page content
@@ -77,14 +78,16 @@ Include SenangWebs Loading in your HTML file's head section with the defer attri
 
 You can customize the loader using the following data attributes:
 
-- `data-swl-type`: Set the loader type ("spinner", "pulse", or "image")
-- `data-swl-color="#RRGGBB"`: Set the color of the loader (for spinner and pulse types)
-- `data-swl-image="URL"`: Set the URL for a custom image loader (when type is "image")
-- `data-swl-duration="2000"`: Set the minimum duration (in milliseconds) to display the loader
-- `data-swl-bg-color="#RRGGBB"`: Set the background color of the overlay
-- `data-swl-bg-opacity="0.8"`: Set the opacity of the overlay background (0 to 1)
-- `data-swl-bg-blur="5"`: Set the blur effect for the background (in pixels)
-- `data-swl-z-index="9999"`: Set the z-index of the loader overlay
+| Attribute | Default | Description |
+|---|---:|---|
+| `data-swl-type` | `spinner` | Loader type: `spinner`, `pulse`, or `image` |
+| `data-swl-color` | `#000000` | Spinner or pulse color |
+| `data-swl-image` | none | URL for the custom image loader |
+| `data-swl-duration` | `0` | Minimum display duration in milliseconds |
+| `data-swl-bg-color` | `#ffffff` | Overlay background color |
+| `data-swl-bg-opacity` | `0.8` | Overlay background opacity |
+| `data-swl-bg-blur` | `0` | Backdrop blur in pixels |
+| `data-swl-z-index` | `9999` | Overlay stacking level; the configured value overrides the default |
 
 ## Performance Best Practices
 
@@ -107,11 +110,10 @@ You can customize the loader using the following data attributes:
 - For medium pages: 1000-2000ms
 - For content-heavy pages: 2000-3000ms
 
-4. Optimize z-index values:
-- Priority loader: 99999 (highest)
-- Normal loaders: 9999 (high)
-- Modal overlays: 1000-9998
-- Regular content: < 1000
+4. Choose a z-index that matches your application:
+- The default is `9999`
+- Use a higher value when the loader must appear above application modals
+- Use a lower value when selected application UI should remain visible
 
 ## Examples
 
